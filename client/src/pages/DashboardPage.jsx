@@ -9,13 +9,16 @@ import Watchlist from '../components/Watchlist';
 import api from '../api/client';
 import { useSocket } from '../hooks/useSocket';
 import { useMarketData } from '../hooks/useMarketData';
+import { safeParseJSON } from '../utils/safeStorage';
 import STORAGE_KEYS from '../utils/storageKeys';
 
 const DashboardPage = () => {
   const { socket } = useSocket();
   const { stocks, loading, error, selected, setSelected, stockMap, refetch } = useMarketData(socket);
   const [search, setSearch] = useState('');
-  const [favorites, setFavorites] = useState(() => JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites) || '[]'));
+  const [favorites, setFavorites] = useState(() =>
+    safeParseJSON(localStorage.getItem(STORAGE_KEYS.favorites), [])
+  );
   const [portfolio, setPortfolio] = useState({ summary: {}, holdings: [] });
   const [modal, setModal] = useState({ open: false, side: 'BUY' });
   const [placing, setPlacing] = useState(false);

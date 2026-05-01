@@ -1,12 +1,13 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import api from '../api/client';
+import { safeParseJSON } from '../utils/safeStorage';
 import STORAGE_KEYS from '../utils/storageKeys';
 
 const AuthContext = createContext(null);
 
 const getInitialUser = () => {
   const raw = localStorage.getItem(STORAGE_KEYS.user);
-  return raw ? JSON.parse(raw) : null;
+  return safeParseJSON(raw, null);
 };
 
 export const AuthProvider = ({ children }) => {
